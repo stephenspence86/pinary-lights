@@ -7,7 +7,7 @@ LEDs controlled by a Raspberry Pi 2 GPIO interface.
 
 This script uses broadcom numbering for the GPIO pins and the gpiozero library.
 
-Copyright <2016> <Stephen Spence> 
+Copyright <2016> <Stephen Spence>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,34 +25,57 @@ Copyright <2016> <Stephen Spence>
 """
 
 from gpiozero import LED
+from PyQt5 import QtGui
+import sys
 import time
+import UIlights
 
-Bit1 = LED(17)
-Bit2 = LED(27)
-Bit3 = LED(22)
-Bit4 = LED(5)
-Bit5 = LED(6)
-Bit6 = LED(13)
-Bit7 = LED(19)
-Bit8 = LED(26)
+class BinaryLights(QtGui, QMainWindow, testUI.Ui_MainWindow):
+    """docstring for """
+    def __init__(self, parent=None):
+        super(BinaryLights, self).__init__(parent)
+        self.setupUi(self)
+        self.pushButton.clicked.connect(self.PinaryLights)
+        self.le =QLineEdit()
 
-Bits = [Bit1, Bit2, Bit3, Bit4, Bit5, Bit6, Bit7, Bit8]
+    def PinaryLights(self):
 
-for n in range (0, 8):
-    Bits[n].off()
+        Bit1 = LED(17)
+        Bit2 = LED(27)
+        Bit3 = LED(22)
+        Bit4 = LED(5)
+        Bit5 = LED(6)
+        Bit6 = LED(13)
+        Bit7 = LED(19)
+        Bit8 = LED(26)
 
-x = int(input("Enter a Number between 1 and 255: "))
+        Bits = [Bit1, Bit2, Bit3, Bit4, Bit5, Bit6, Bit7, Bit8]
 
-while x < 1 or x > 255:
+        for n in range (0, 8):
+            Bits[n].off()
 
-    x = int(input ("Enter a Number between 1 and 255:"))
+        x = self.le.text()
 
-for n in range (0, 8):
-    rem = x%2
-    if rem == 1:
-        Bits[n].on()
-    x = x // 2
+        #while x < 1 or x > 255:
 
-time.sleep(5)
-for n in range (0, 8):
-    Bits[n].off()
+            #x = int(input ("Enter a Number between 1 and 255:"))
+
+        for n in range (0, 8):
+            rem = x%2
+            if rem == 1:
+                Bits[n].on()
+            x = x // 2
+
+        time.sleep(5)
+        for n in range (0, 8):
+            Bits[n].off()
+        pass
+
+def main():
+    app = QtGui.QApplication(sys.argv)
+    form = BinaryLights()
+    form.show()
+    app.exec_()
+
+if _name_ == '_main_':
+    main()
